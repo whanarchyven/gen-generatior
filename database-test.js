@@ -1,12 +1,24 @@
+const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
 
+async function openDb() {
+    return sqlite.open({
+        filename: './database.sqlite',
+        driver: sqlite3.Database,
+    });
+}
+
 async function setup() {
-    const db = await sqlite.open('./mydb.sqlite');
-    await db.migrate({force: 'last'});
+    const db = await openDb();
+    // await db.migrate(
+    //     {
+    //         migrationsPath: './migrations', //add cutom path to your migrations
+    //         force: 'last'
+    //     }
+    // );
 
-    const gen = await db.all('SELECT * FROM Gen');
-    console.log('ALL PEOPLE', JSON.stringify(gen, null, 2));
-
+    const gens= await db.all('SELECT * FROM Gen');
+    console.log(gens);
 }
 
 setup();
