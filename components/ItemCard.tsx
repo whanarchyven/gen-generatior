@@ -24,7 +24,12 @@ const ItemCard = ({item}: ItemCardInterface) => {
         if (item.increase) {
             let data = Object.entries(item.increase)
             return <div className={'grid grid-cols-2 w-48 gap-4'}>{data.map(stat => {
-                return <StatRequirementBar stat_value={stat[1]} stat_name={stat[0]} key={stat[0]}></StatRequirementBar>
+                if(stat[1]!=0){
+                    return <StatRequirementBar stat_value={stat[1]} stat_name={stat[0]} key={stat[0]}></StatRequirementBar>
+                }
+                else{
+                    return null
+                }
             })}</div>
         }
     }

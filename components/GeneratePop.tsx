@@ -102,6 +102,49 @@ const GeneratePop = ({item,togglePop}:generatePopInterface) => {
     }
 
 
+    const saveResult=()=>{
+
+        let object={
+            category: thirstScore.category,
+            type: thirstScore.type,
+            name: thirstScore.name,
+            short_name:thirstScore.short_name,
+            rarity: thirstScore.rarity,
+            str: 0,
+            dex: 0,
+            int: 0,
+            krm: 0,
+            vit: 0,
+        }
+
+        if(thirstScore.increase?.str){
+            object.str=thirstScore.increase?.str
+        }
+        if(thirstScore.increase?.dex){
+            object.dex=thirstScore.increase?.dex
+        }
+        if(thirstScore.increase?.int){
+            object.int=thirstScore.increase?.int
+        }
+        if(thirstScore.increase?.vit){
+            object.vit=thirstScore.increase?.vit
+        }
+        if(thirstScore.increase?.krm){
+            object.krm=thirstScore.increase?.krm
+        }
+
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                alert(xhr.responseText);
+            }
+        }
+        xhr.open("POST", 'https://gen-generatior.vercel.app/api/gens', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(object));
+    }
+
+
     const [currentStage,setCurrentStage]=useState(0)
     const [firstScore,setFirstScore]=useState(0)
 
@@ -163,7 +206,7 @@ const GeneratePop = ({item,togglePop}:generatePopInterface) => {
             <div className={'w-[400px] h-[600px]'}>
                 <ItemCard item={thirstScore}></ItemCard>
             </div>
-            <button className={'bg-white rounded-2xl w-48 h-10'} onClick={()=>{togglePop()}}>Finish</button>
+            <button className={'bg-white rounded-2xl w-48 h-10'} onClick={()=>{saveResult();console.log('sended');togglePop()}}>Finish</button>
             {/*<button className={'bg-white rounded-2xl w-48 h-10'}>Save</button>*/}
             <p className={'text-3xl cursor-pointer absolute top-2 right-2 text-white'} onClick={()=>{togglePop()}}>X</p>
         </div>

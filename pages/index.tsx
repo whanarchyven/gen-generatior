@@ -2,7 +2,7 @@ import type {NextPage} from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import it from "node:test";
 import ItemCard from "../components/ItemCard";
 
@@ -11,55 +11,63 @@ import GeneratePop from "../components/GeneratePop";
 
 
 const Home: NextPage = () => {
-    const data: ItemCardInterface[] = [
-        {
-            item: {
-                category: 'eyes',
-                type: 'gen',
-                name: 'EY_01_Pixel-Happy',
-                short_name:'Pixel-Happy',
-                rarity: 'common',
-            }
-        },
-        {
-            item: {
-                category: 'eyes',
-                type: 'gen',
-                name: 'EY_02_Pixel-sad',
-                short_name:'Pixel-sad',
-                rarity: 'common',
-            }
-        },
-        {
-            item: {
-                category: 'eyes',
-                type: 'gen',
-                name: 'EY_03_Pixel-love',
-                short_name:'Pixel-love',
-                rarity: 'rare',
-                increase: {
-                    str: 5,
-                    dex: 2,
-                    int: 2,
-                }
-            }
-        },
-        {
-            item: {
-                category: 'eyes',
-                type: 'gen',
-                name: 'EY_12_Paint-pink',
-                short_name:'Paint-pink',
-                rarity: 'uncommon',
-                increase: {
-                    str: 3,
-                    dex: 3,
-                }
-            }
-        },
+
+    const inititalData: ItemCardInterface[] = [
+
     ]
 
-    const [workData, setWorkData] = useState(data);
+    const [workData, setWorkData] = useState(inititalData);
+
+    const  parserFunc=async ()=>{
+        let response= await fetch('https://gen-generatior.vercel.app/api/gens');
+        response.json().then(function(data) {
+            console.log(data);
+            data.map((gen:any)=>{
+                let obj={
+                    item:{
+                        category: gen.category,
+                        type: gen.type,
+                        name: gen.name,
+                        short_name:gen.short_name,
+                        rarity: gen.rarity,
+                        increase: {
+                            str: 0,
+                            dex: 0,
+                            vit: 0,
+                            int: 0,
+                            krm: 0
+                        }
+                    }
+                }
+                if(gen.str!=0){
+                    obj.item.increase.str=gen.str
+                }
+                if(gen.dex!=0){
+                    obj.item.increase.dex=gen.dex
+                }
+                if(gen.int!=0){
+                    obj.item.increase.int=gen.int
+                }
+                if(gen.vit!=0){
+                    obj.item.increase.vit=gen.vit
+                }
+                if(gen.krm!=0){
+                    obj.item.increase.krm=gen.krm
+                }
+
+                if(inititalData.findIndex(item=>item.item.name==obj.item.name)==-1){
+                    inititalData.push(obj)
+                }
+
+            })
+            setWorkData([...inititalData]);
+        });
+    }
+
+    useEffect(()=>{
+        parserFunc();
+    },[])
+
 
 
     const [choosenItem,setChoosenItem]=useState(workData[0])
@@ -91,70 +99,6 @@ const Home: NextPage = () => {
             increase: 9,
         }
     ]
-
-    const getProperties = ({item}:ItemCardInterface) => {
-        if (item.increase) {
-            let data = Object.entries(item.increase)
-            return <div className={'flex flex-col'}>{data.map(stat => {
-                return <div className={'text-white'} key={stat[0]}>
-                    {stat[0]} - {stat[1]}
-                </div>
-            })}</div>
-        }
-    }
-
-    const calculateProperties = (rarity_p: string) => {
-        let result: { stat_res: 'str' | 'dex' | 'int' | 'krm' | 'vit', stat_value: number }[] = [];
-        let rar = rarities.find(item => item.rarity == rarity_p);
-        let stat_temps = stats;
-        if (rar) {
-            const getRandomArbitrary = (max: number) => {
-                return Math.floor(Math.random() * (max - 1) + 1);
-            }
-            let increase_limit = rar.increase;
-            for (let i = 0; i < rar.categories; i++) {
-                let stat = stat_temps[Math.floor(Math.random() * stat_temps.length)]
-                let delIndex = stat_temps.indexOf(stat);
-                if (delIndex != -1) {
-                    stat_temps.splice(delIndex, 1);
-                }
-                let stat_increase = 0;
-                if (i + 1 == rar.categories) {
-                    stat_increase = increase_limit;
-                } else {
-                    stat_increase = getRandomArbitrary(increase_limit);
-                    increase_limit = increase_limit - stat_increase;
-                }
-                let obj = {
-                    stat_res: stat,
-                    stat_value: stat_increase,
-                }
-                result.push(obj);
-            }
-        }
-        return result;
-    }
-
-
-    const setProperties = (index: number, res_item:ItemCardInterface) => {
-        let temp = [...workData];
-        let get_categories = calculateProperties(temp[index].item.rarity);
-        let temp_obj = {...res_item};
-        let increase: {
-            str?: number,
-            dex?: number,
-            vit?: number,
-            int?: number,
-            krm?: number,
-        } = {}
-        get_categories.map(item => {
-            increase[item.stat_res] = item.stat_value;
-        })
-        temp_obj.item.increase = increase;
-        temp[index] = temp_obj;
-        setWorkData([...temp])
-    }
-
 
     return (
         <div className={'bg-black'}>
