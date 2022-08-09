@@ -39,7 +39,7 @@ const ItemCard = ({item}: ItemCardInterface) => {
             <div className={'relative h-[228px] w-[170px] bg-white bg-opacity-20 rounded-xl'} >
                 <Image src={'/images/' + item.category + '/' + item.name + '.png'} layout={'fill'}></Image>
             </div>
-            <p className={'text-white'}>{item.short_name}</p>
+            <p className={'text-white'}>{item.name}</p>
             <p className={'absolute rounded-full p-2 bg-white top-2 left-2'}>{item.rarity}</p>
             <p className={'absolute rounded-full p-2 bg-white top-2 right-2'}>{item.category}</p>
             {item.increase!=undefined?getProperties(item):null}

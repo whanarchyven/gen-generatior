@@ -32,7 +32,7 @@ const GeneratePop = ({item,togglePop}:generatePopInterface) => {
 
     const generateSecondStage=(rarity:'common'|'uncommon'|'rare')=>{
         const stats: ('str' | 'dex' | 'int' | 'krm' | 'vit')[] = [
-            'str', 'dex', 'vit', 'int', 'krm'
+            'str', 'dex', 'vit', 'int',
         ]
         let times=0;
         let generated_stats:('str' | 'dex' | 'int' | 'krm' | 'vit')[]=[]
@@ -162,7 +162,7 @@ const GeneratePop = ({item,togglePop}:generatePopInterface) => {
 
     if(currentStage==0){
         return (
-            <div className={'w-full h-full fixed z-50 bg-black flex justify-around flex-col w-full items-center'}>
+            <div className={'w-full h-[100vh] top-0 left-0 fixed z-50 bg-black flex justify-around flex-col w-full items-center'}>
                     <div className={'w-[400px] h-[600px]'}>
                     <ItemCard item={item.item}></ItemCard>
                 </div>
@@ -172,7 +172,7 @@ const GeneratePop = ({item,togglePop}:generatePopInterface) => {
         );
     }
     else if(currentStage==1){
-        return <div className={'w-full h-full fixed z-50 bg-black flex items-center flex-wrap flex-col justify-around'}>
+        return <div className={'w-full h-[100vh] top-0 left-0 fixed z-50 bg-black flex items-center flex-wrap flex-col justify-around'}>
             <p className={'text-white text-5xl'}>You are generating points for {item.item.rarity} item now:</p>
             <p className={'text-white text-5xl'}>{firstScore}</p>
             <button className={'bg-white rounded-2xl w-48 h-10'} onClick={()=>{setFirstScore(generateFirstStage(item.item.rarity))}}>Regenerate</button>
@@ -181,7 +181,7 @@ const GeneratePop = ({item,togglePop}:generatePopInterface) => {
         </div>
     }
     else if(currentStage==2){
-        return <div className={'w-full h-full fixed z-50 bg-black flex items-center flex-wrap flex-col justify-around'}>
+        return <div className={'w-full h-[100vh] top-0 left-0 fixed z-50 bg-black flex items-center flex-wrap flex-col justify-around'}>
             <p className={'text-white text-5xl'}>You are generated this stats for {item.item.rarity} item</p>
             {secondScore.map(stat=>{return <p className={'text-white text-5xl'} key={stat}>{stat}</p>})}
             {/*{generateSecondStage(item.item.rarity)}*/}
@@ -191,7 +191,7 @@ const GeneratePop = ({item,togglePop}:generatePopInterface) => {
         </div>
     }
     else if(currentStage==3){
-        return <div className={'w-full h-full fixed z-50 bg-black flex items-center flex-wrap flex-col justify-around'}>
+        return <div className={'w-full h-[100vh] top-0 left-0 fixed z-50 bg-black flex items-center flex-wrap flex-col justify-around'}>
             <p className={'text-white text-5xl'}>You are managing your points to your stats for {item.item.rarity} item now:</p>
             {thirdScore.map(stat=>{return <p className={'text-white text-5xl'} key={stat.stat_name}>{stat.stat_name} ---- {stat.stat_score}</p>})}
             {/*{generateSecondStage(item.item.rarity)}*/}
@@ -201,7 +201,7 @@ const GeneratePop = ({item,togglePop}:generatePopInterface) => {
         </div>
     }
     else if(currentStage==4){
-        return <div className={'w-full h-full fixed z-50 bg-black flex items-center flex-wrap flex-col justify-around'}>
+        return <div className={'w-full h-[100vh] top-0 left-0 fixed z-50 bg-black flex items-center flex-wrap flex-col justify-around'}>
             <p className={'text-white text-5xl'}>Your generated Item:</p>
             <div className={'w-[400px] h-[600px]'}>
                 <ItemCard item={thirstScore}></ItemCard>

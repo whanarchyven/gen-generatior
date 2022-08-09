@@ -12,23 +12,21 @@ import GeneratePop from "../components/GeneratePop";
 
 const Home: NextPage = () => {
 
-    const inititalData: ItemCardInterface[] = [
-
-    ]
-
+    const inititalData: ItemCardInterface[] = []
     const [workData, setWorkData] = useState(inititalData);
 
-    const  parserFunc=async ()=>{
-        let response= await fetch('https://gen-generatior.vercel.app/api/gens');
-        response.json().then(function(data) {
+    const parserFunc = async () => {
+        // let response= await fetch('https://gen-generatior.vercel.app/api/gens');
+        let response = await fetch('https://gen-generatior.vercel.app/api/gens');
+        response.json().then(function (data) {
             console.log(data);
-            data.map((gen:any)=>{
-                let obj={
-                    item:{
+            data.map((gen: any) => {
+                let obj = {
+                    item: {
                         category: gen.category,
                         type: gen.type,
                         name: gen.name,
-                        short_name:gen.short_name,
+                        short_name: gen.short_name,
                         rarity: gen.rarity,
                         increase: {
                             str: 0,
@@ -39,23 +37,23 @@ const Home: NextPage = () => {
                         }
                     }
                 }
-                if(gen.str!=0){
-                    obj.item.increase.str=gen.str
+                if (gen.str != 0) {
+                    obj.item.increase.str = gen.str
                 }
-                if(gen.dex!=0){
-                    obj.item.increase.dex=gen.dex
+                if (gen.dex != 0) {
+                    obj.item.increase.dex = gen.dex
                 }
-                if(gen.int!=0){
-                    obj.item.increase.int=gen.int
+                if (gen.int != 0) {
+                    obj.item.increase.int = gen.int
                 }
-                if(gen.vit!=0){
-                    obj.item.increase.vit=gen.vit
+                if (gen.vit != 0) {
+                    obj.item.increase.vit = gen.vit
                 }
-                if(gen.krm!=0){
-                    obj.item.increase.krm=gen.krm
+                if (gen.krm != 0) {
+                    obj.item.increase.krm = gen.krm
                 }
 
-                if(inititalData.findIndex(item=>item.item.name==obj.item.name)==-1){
+                if (inititalData.findIndex(item => item.item.name == obj.item.name) == -1) {
                     inititalData.push(obj)
                 }
 
@@ -64,17 +62,16 @@ const Home: NextPage = () => {
         });
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         parserFunc();
-    },[])
+    }, [])
 
 
+    const [choosenItem, setChoosenItem] = useState(workData[0])
 
-    const [choosenItem,setChoosenItem]=useState(workData[0])
+    const [popOpen, setPopOpen] = useState(false);
 
-    const [popOpen,setPopOpen]=useState(false);
-
-    const togglePop=()=>{
+    const togglePop = () => {
         setPopOpen(!popOpen);
     }
 
@@ -108,12 +105,16 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
 
-            <main className={'w-full h-full flex justify-center items-center bg-black h-[100vh] p-4'}>
+            <main className={'w-full h-full flex justify-center items-center bg-black  p-4'}>
                 <div className={'w-full grid-cols-4 gap-10 h-full grid'}>
                     {workData.map((item, item_index) => {
-                        return <div className={'w-full h-[600px] flex justify-center flex-wrap'} key={item.item.name}>
+                        return <div className={'mt-10 w-full h-[600px] flex justify-center flex-wrap'} key={item.item.name}>
                             <ItemCard item={item.item}></ItemCard>
-                            <button onClick={()=>{setChoosenItem(item);togglePop()}} className={'h-10 bg-white mt-5 w-full rounded-2xl'}>Generate</button>
+                            <button onClick={() => {
+                                setChoosenItem(item);
+                                togglePop()
+                            }} className={'h-10 bg-white mt-5 w-full rounded-2xl'}>Generate
+                            </button>
                             {/*<div className={'h-16 relative'}>*/}
                             {/*    <Image src={'/images/'+item.category+'/'+item.name+'.png'} layout={'fill'}></Image>*/}
                             {/*</div>*/}
@@ -136,7 +137,7 @@ const Home: NextPage = () => {
                         </div>
                     })}
                 </div>
-                {popOpen?<GeneratePop item={choosenItem} togglePop={togglePop}></GeneratePop>:null}
+                {popOpen ? <GeneratePop item={choosenItem} togglePop={togglePop}></GeneratePop> : null}
             </main>
 
             <footer className={styles.footer}>
