@@ -12,12 +12,12 @@ import GeneratePop from "../components/GeneratePop";
 
 const Home: NextPage = () => {
 
-    const inititalData: ItemCardInterface[] = []
+    const inititalData: ItemCardInterface[] = [] ;
     const [workData, setWorkData] = useState(inititalData);
 
     const parserFunc = async () => {
-        // let response= await fetch('https://gen-generatior.vercel.app/api/gens');
-        let response = await fetch('https://gen-generatior.vercel.app/api/gens');
+        let response= await fetch('https://gen-generatior.vercel.app/api/gens');
+        // let response = await fetch('http://localhost:3000/api/gens');
         response.json().then(function (data) {
             console.log(data);
             data.map((gen: any) => {
@@ -79,11 +79,11 @@ const Home: NextPage = () => {
         'str', 'dex', 'vit', 'int', 'krm'
     ]
 
-    const categories=[
-        'background','eyes','mouth','scar','ears','body','texture'
+    const categories = [
+        'background', 'eyes', 'mouth', 'scar', 'ears', 'body', 'texture'
     ]
 
-    const [choosenCategory,setChoosenCategory]=useState(categories[0])
+    const [choosenCategory, setChoosenCategory] = useState(categories[0])
 
     const rarities = [
         {
@@ -113,19 +113,22 @@ const Home: NextPage = () => {
 
             <main className={'w-full h-full flex justify-center items-center bg-black  p-4'}>
                 <div className={'w-full h-16 bg-white fixed z-20 top-0 flex flex-row items-center justify-around'}>
-                    {categories.map(cat=>{
-                        if(cat==choosenCategory){
+                    {categories.map(cat => {
+                        if (cat == choosenCategory) {
                             return <div className={'p-5 bg-black text-white cursor-pointer'}>{cat}</div>
-                        }
-                        else {
-                            return <div className={'p-5 border-2 border-black text-black cursor-pointer'} onClick={()=>{setChoosenCategory(cat)}}>{cat}</div>
+                        } else {
+                            return <div className={'p-5 border-2 border-black text-black cursor-pointer'}
+                                        onClick={() => {
+                                            setChoosenCategory(cat)
+                                        }}>{cat}</div>
                         }
                     })}
                 </div>
-                <div className={'w-full grid-cols-4 gap-10 h-full grid pt-10'}>
+                <div className={'w-full grid-cols-4 gap-10 h-full grid pt-10 pb-10'}>
                     {workData.map((item, item_index) => {
-                        if(item.item.category==choosenCategory){
-                            return <div className={'mt-10 w-full h-[600px] flex justify-center flex-wrap'} key={item.item.name}>
+                        if (item.item.category == choosenCategory) {
+                            return <div className={'mt-10 w-full h-[600px] flex justify-center flex-wrap'}
+                                        key={item.item.name}>
                                 <ItemCard item={item.item}></ItemCard>
                                 <button onClick={() => {
                                     setChoosenItem(item);
@@ -133,8 +136,7 @@ const Home: NextPage = () => {
                                 }} className={'h-10 bg-white mt-5 w-full rounded-2xl'}>Generate
                                 </button>
                             </div>
-                        }
-                        else{
+                        } else {
                             return null
                         }
                     })}

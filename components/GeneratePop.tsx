@@ -139,6 +139,7 @@ const GeneratePop = ({item,togglePop}:generatePopInterface) => {
                 alert(xhr.responseText);
             }
         }
+        // xhr.open("POST", 'http://localhost:3000/api/gens', true);
         xhr.open("POST", 'https://gen-generatior.vercel.app/api/gens', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(object));

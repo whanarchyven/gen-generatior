@@ -23,7 +23,7 @@ import initMiddleware from '../../components/init-middleware'
 //     })
 // )
 
-export default async function getAllGens(req:NextApiRequest,res:NextApiResponse){
+export default async function getAllGens(req: NextApiRequest, res: NextApiResponse) {
 
     // await NextCors(req, res, {
     //     // Options
@@ -38,14 +38,14 @@ export default async function getAllGens(req:NextApiRequest,res:NextApiResponse)
     const MongoClient = require('mongodb').MongoClient;
 // Connect to the db
 
-    const client= new MongoClient('mongodb://mf_gen_test:vfGxG38Z54501<ia@89.208.208.250/mf_bunnies_generation_test');
+    const client = new MongoClient('mongodb://mf_gen_test:vfGxG38Z54501<ia@89.208.208.250/mf_bunnies_generation_test');
 
-    const getTop= async ()=>{
-        try{
+    const getTop = async () => {
+        try {
             await client.connect();
             console.log('Connected successfull');
             // await client.db().createCollection('gens');
-            const users=client.db().collection('gens');
+            const users = client.db().collection('gens');
             // await users.insertOne({
             //     category: 'eyes',
             //     type: 'gen',
@@ -60,30 +60,37 @@ export default async function getAllGens(req:NextApiRequest,res:NextApiResponse)
             //     const user= await users.findOne(function() { if(this.score>=max){max=this.score;return this.score} });
             // }
 
-            const user= await users.find().toArray();
+            const user = await users.find().toArray();
             // console.log(user);
 
             return res.json(user);
             // return res.json(users);
-        } catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
 
-    const writeNew=async ()=>{
-        try{
+    const writeNew = async () => {
+        try {
             await client.connect();
             console.log('Connected succesfull');
             // await client.db().createCollection('gens');
-            const users=client.db().collection('gens');
+            const users = client.db().collection('gens');
             // console.log('AUESALUT '+req.body.name+req.body.score)
 
-            const some=await users.findOne({name:req.body.name});
+            const some = await users.findOne({name: req.body.name});
 
-            if(some!=null){
-                users.findOneAndUpdate({name:req.body.name}, {$set:{str:req.body.str,dex:req.body.dex,vit:req.body.vit,int:req.body.int,krm:req.body.krm}},{upsert:true})
-            }
-            else{
+            if (some != null) {
+                users.findOneAndUpdate({name: req.body.name}, {
+                    $set: {
+                        str: req.body.str,
+                        dex: req.body.dex,
+                        vit: req.body.vit,
+                        int: req.body.int,
+                        krm: req.body.krm
+                    }
+                }, {upsert: true})
+            } else {
                 await users.insertOne({
                     category: req.body.category,
                     type: req.body.type,
@@ -114,28 +121,22 @@ export default async function getAllGens(req:NextApiRequest,res:NextApiResponse)
             //     int:1,
             // });
 
-        } catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
 
     // const db = await openDb();
-    if (req.method=='POST'){
+    if (req.method == 'POST') {
         return writeNew();
     }
 
-    if(req.method=='GET'){
+    if (req.method == 'GET') {
         return getTop();
     }
     // const players=await db.all('select * from player')
     // console.log(players);
     // res.json(players)
-
-
-
-
-
-
 
 
 }
